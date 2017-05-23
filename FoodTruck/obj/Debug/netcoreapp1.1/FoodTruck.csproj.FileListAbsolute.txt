@@ -1,0 +1,9 @@
+C:\Users\Marcus Joost\Desktop\FoodTruck\FoodTruck\FoodTruck\bin\Debug\netcoreapp1.1\FoodTruck.deps.json
+C:\Users\Marcus Joost\Desktop\FoodTruck\FoodTruck\FoodTruck\bin\Debug\netcoreapp1.1\FoodTruck.runtimeconfig.json
+C:\Users\Marcus Joost\Desktop\FoodTruck\FoodTruck\FoodTruck\bin\Debug\netcoreapp1.1\FoodTruck.runtimeconfig.dev.json
+C:\Users\Marcus Joost\Desktop\FoodTruck\FoodTruck\FoodTruck\bin\Debug\netcoreapp1.1\FoodTruck.dll
+C:\Users\Marcus Joost\Desktop\FoodTruck\FoodTruck\FoodTruck\obj\Debug\netcoreapp1.1\FoodTruck.csprojResolveAssemblyReference.cache
+C:\Users\Marcus Joost\Desktop\FoodTruck\FoodTruck\FoodTruck\obj\Debug\netcoreapp1.1\FoodTruck.AssemblyInfo.cs
+C:\Users\Marcus Joost\Desktop\FoodTruck\FoodTruck\FoodTruck\bin\Debug\netcoreapp1.1\FoodTruck.pdb
+C:\Users\Marcus Joost\Desktop\FoodTruck\FoodTruck\FoodTruck\obj\Debug\netcoreapp1.1\FoodTruck.dll
+C:\Users\Marcus Joost\Desktop\FoodTruck\FoodTruck\FoodTruck\obj\Debug\netcoreapp1.1\FoodTruck.pdb
