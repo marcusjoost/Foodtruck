@@ -14,7 +14,7 @@ namespace FoodTruck
         {
         }
         public DbSet<Dish> Dishes { get; set; }
-        public DbSet<Models.Truck> Trucks { get; set; }
+        public DbSet<Truck> Trucks { get; set; }
         public DbSet<Rating> Ratings { get; set; }
         public DbSet<Menu> Menues { get; set; }
     }

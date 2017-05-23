@@ -15,15 +15,17 @@ namespace FoodTruck.Repositories
             _db = db;
         }
 
-        public async Task<int> CreateMenuAsync(Menu menu)
+        public async Task<int> CreateAsync(Menu value)
         {
-            var obj = new Menu { Dishes = menu.Dishes, FoodTruckId = menu.FoodTruckId};
-            _db.Menues.Add(obj);
+            var query = _db.Menues.Where(i => i.Id == value.Id).Select(i => i);
+            if (value.Id != 0 && query.FirstOrDefault() != null) throw new InvalidOperationException("Item already exists in the database.");
+
+            _db.Menues.Add(value);
             await _db.SaveChangesAsync();
-            return obj.Id = menu.Id;
+            return value.Id;
         }
 
-        public async Task<bool> DeleteMenuAsync(int menuId)
+        public async Task<bool> DeleteAsync(int menuId)
         {
             var menu = _db.Menues.FirstOrDefault(i => i.Id == menuId);
             if(menu == null)
@@ -35,14 +37,18 @@ namespace FoodTruck.Repositories
             return true;
         }
 
-        public Menu GetMenu(int menuId)
+        public async Task<Menu> FindAsync(int menuId)
         {
             return _db.Menues.FirstOrDefault(i => i.Id == menuId);
         }
 
-        public async Task<bool> UpdateMenuAsync(Menu menu)
+        public async Task<bool> UpdateAsync(Menu menu, int id)
         {
-            var obj = _db.Menues.FirstOrDefault(i => i.Id == menu.Id);
+            if (menu == null)
+            {
+                return false;
+            }
+            var obj = _db.Menues.FirstOrDefault(i => i.Id == id);
             if(obj == null)
             {
                 return false;
@@ -50,8 +56,8 @@ namespace FoodTruck.Repositories
             obj.FoodTruckId = menu.FoodTruckId;
             obj.Dishes = menu.Dishes;
             _db.Menues.Update(obj);
-            await _db.SaveChangesAsync();
-            return true;
+
+            return await _db.SaveChangesAsync() > 0;
         }
     }
 }

@@ -8,9 +8,9 @@ namespace FoodTruck.Repositories.Interfaces
 {
     public interface IDishRepository
     {
-        Task<int> CreateDishAsync(Dish dish);
-        Task<bool> UpdateDishAsync(Dish dish);
-        Task<bool> DeleteDishAsync(int dishId);
-        Dish GetDish(int dishId);
+        Task<int> CreateAsync(Dish dish);
+        Task<bool> UpdateAsync(Dish dish, int id);
+        Task<bool> DeleteAsync(int dishId);
+        Task<Dish> FindAsync(int dishId);
     }
 }

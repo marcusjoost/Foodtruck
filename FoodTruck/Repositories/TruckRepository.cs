@@ -1,5 +1,6 @@
 ﻿using FoodTruck.Models;
 using FoodTruck.Repositories.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,9 +26,9 @@ namespace FoodTruck.Repositories
             return value.Id;
         }
 
-        public async Task<bool> DeleteAsync(int foodtruckId)
+        public async Task<bool> DeleteAsync(int truckId)
         {
-            var foodtruck = _db.Trucks.FirstOrDefault(i => i.Id == foodtruckId);
+            var foodtruck = _db.Trucks.FirstOrDefault(i => i.Id == truckId);
             if(foodtruck == null)
             {
                 return false;
@@ -37,23 +38,28 @@ namespace FoodTruck.Repositories
             return true;
         }
 
-        public async Task<Truck> FindAsync(int foodtruckId)
+        public async Task<Truck> FindAsync(int truckId)
         {
-            return _db.Trucks.Where(i => i.Id == foodtruckId).Select(i => i).FirstOrDefault();
+            return _db.Trucks.FirstOrDefault(i => i.Id == truckId);
         }
        
-        public async Task<bool> UpdateAsync(Models.Truck foodtruck)
+        public async Task<bool> UpdateAsync(Truck truck, int id)
         {
-            var obj = _db.Trucks.FirstOrDefault(i => i.Id == foodtruck.Id);
-            if(foodtruck == null)
+            if (truck == null)
             {
                 return false;
             }
-            obj.Name = foodtruck.Name;
-            obj.Coordinates = foodtruck.Coordinates;
-            _db.Trucks.Update(foodtruck);
-            await _db.SaveChangesAsync();
-            return true;
+            var obj = _db.Trucks.FirstOrDefault(i => i.Id == id);
+            if (truck == null)
+            {
+                return false;
+            }
+
+            obj.Name = truck.Name;
+            obj.Coordinates = truck.Coordinates;
+
+            _db.Update(obj);
+            return await _db.SaveChangesAsync() > 0;
         }
     }
 }

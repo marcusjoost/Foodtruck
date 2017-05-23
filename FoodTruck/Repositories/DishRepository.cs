@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using FoodTruck.Models;
@@ -14,15 +13,17 @@ namespace FoodTruck.Repositories
         {
             _db = db;
         }
-        public async Task<int> CreateDishAsync(Dish dish)
+        public async Task<int> CreateAsync(Dish value)
         {
-            var obj = new Dish { Name = dish.Name, Price = dish.Price };
-            _db.Dishes.Add(obj);
+            var query = _db.Dishes.Where(i => i.Id == value.Id).Select(i => i);
+            if (value.Id != 0 && query.FirstOrDefault() != null) throw new InvalidOperationException("Item already exists in the database.");
+
+            _db.Dishes.Add(value);
             await _db.SaveChangesAsync();
-            return obj.Id = dish.Id;
+            return value.Id;
         }
 
-        public async Task<bool> DeleteDishAsync(int dishId)
+        public async Task<bool> DeleteAsync(int dishId)
         {
             var dish = _db.Dishes.FirstOrDefault(i => i.Id == dishId);
             if (dish == null)
@@ -34,14 +35,18 @@ namespace FoodTruck.Repositories
             return true;
         }
 
-        public Dish GetDish(int dishId)
+        public async Task<Dish> FindAsync(int dishId)
         {
             return _db.Dishes.FirstOrDefault(i => i.Id == dishId);
         }
 
-        public async Task<bool> UpdateDishAsync(Dish dish)
+        public async Task<bool> UpdateAsync(Dish dish, int id)
         {
-            var obj = _db.Dishes.FirstOrDefault(i => i.Id == dish.Id);
+            if (dish == null)
+            {
+                return false;
+            }
+            var obj = _db.Dishes.FirstOrDefault(i => i.Id == id);
             if(dish == null)
             {
                 return false;
@@ -49,8 +54,8 @@ namespace FoodTruck.Repositories
             obj.Name = dish.Name;
             obj.Price = dish.Price;
             _db.Dishes.Update(obj);
-            await _db.SaveChangesAsync();
-            return true;
+
+            return await _db.SaveChangesAsync() > 0;
         }
     }
 }

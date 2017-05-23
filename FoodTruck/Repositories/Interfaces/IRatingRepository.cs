@@ -8,11 +8,11 @@ namespace FoodTruck.Repositories.Interfaces
 {
     public interface IRatingRepository
     {
-        Task<int> CreateRatingAsync(Rating rating);
-        Task<bool> UpdateRatingAsync(Rating rating);
-        Task<bool> DeleteRatingAsync(int ratingId);
+        Task<int> CreateAsync(Rating rating);
+        Task<bool> UpdateAsync(Rating rating, int id);
+        Task<bool> DeleteAsync(int ratingId);
         IEnumerable<Rating> GetRatingToFoodtruck(int foodtruckId);
         IEnumerable<Rating> GetRatingToUser(int userId);
-        Rating GetRating(int ratingId);
+        Task<Rating> FindAsync(int ratingId);
     }
 }

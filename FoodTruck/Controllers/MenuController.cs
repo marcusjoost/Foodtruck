@@ -18,9 +18,9 @@ namespace FoodTruck.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetAsync(int id)
+        public async Task<IActionResult> ReadAsync(int id)
         {
-            var result = _repo.GetMenu(id);
+            var result = await _repo.FindAsync(id);
             if (result == null)
             {
                 return NotFound();
@@ -31,7 +31,7 @@ namespace FoodTruck.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteAsync(int id)
         {
-            var result = await _repo.DeleteMenuAsync(id);
+            var result = await _repo.DeleteAsync(id);
             if (result)
             {
                 return NoContent();
@@ -40,13 +40,13 @@ namespace FoodTruck.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateAsync([FromBody]Menu menu, int id)
+        public async Task<IActionResult> UpdateAsync(int id,[FromBody]Menu menu)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            var ok = await _repo.UpdateMenuAsync(menu);
+            var ok = await _repo.UpdateAsync(menu, id);
             if (ok)
             {
                 return NoContent();
@@ -61,8 +61,8 @@ namespace FoodTruck.Controllers
             {
                 return BadRequest(ModelState);
             }
-            var ok = await _repo.CreateMenuAsync(menu);
-            return CreatedAtAction("Get", new { ok }, menu);
+            var id = await _repo.CreateAsync(menu);
+            return CreatedAtAction("ReadAsync", new { id }, menu);
         }
     }
 }

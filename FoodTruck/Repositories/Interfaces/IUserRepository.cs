@@ -8,9 +8,9 @@ namespace FoodTruck.Repositories.Interfaces
 {
     public interface IUserRepository
     {
-        Task<int> CreateUserAsync(User user);
-        Task<bool> UpdateUserAsync(User user);
-        Task<bool> DeleteUserAsync(int userId);
-        User GetUser(int userId);
+        Task<int> CreateAsync(User user);
+        Task<bool> UpdateAsync(User user, int id);
+        Task<bool> DeleteAsync(int userId);
+        Task<User> FindAsync(int userId);
     }
 }

@@ -8,9 +8,9 @@ namespace FoodTruck.Repositories.Interfaces
 {
     public interface IMenuRepository
     {
-        Task<int> CreateMenuAsync(Menu menu);
-        Task<bool> UpdateMenuAsync(Menu menu);
-        Task<bool> DeleteMenuAsync(int menuId);
-        Menu GetMenu(int menuId);
+        Task<int> CreateAsync(Menu menu);
+        Task<bool> UpdateAsync(Menu menu, int id);
+        Task<bool> DeleteAsync(int menuId);
+        Task<Menu> FindAsync(int menuId);
     }
 }

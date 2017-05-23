@@ -18,9 +18,9 @@ namespace FoodTruck.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetAsync(int id)
+        public async Task<IActionResult> ReadAsync(int id)
         {
-            var result = _repo.GetDish(id);
+            var result = await _repo.FindAsync(id);
             if (result == null)
             {
                 return NotFound();
@@ -31,7 +31,7 @@ namespace FoodTruck.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteAsync(int id)
         {
-            var result = await _repo.DeleteDishAsync(id);
+            var result = await _repo.DeleteAsync(id);
             if (result)
             {
                 return NoContent();
@@ -40,13 +40,13 @@ namespace FoodTruck.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateAsync([FromBody]Dish dish, int id)
+        public async Task<IActionResult> UpdateAsync(int id,[FromBody]Dish dish)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            var ok = await _repo.UpdateDishAsync(dish);
+            var ok = await _repo.UpdateAsync(dish, id);
             if (ok)
             {
                 return NoContent();
@@ -61,8 +61,8 @@ namespace FoodTruck.Controllers
             {
                 return BadRequest(ModelState);
             }
-            var ok = await _repo.CreateDishAsync(dish);
-            return CreatedAtAction("Get", new { ok }, dish);
+            var id = await _repo.CreateAsync(dish);
+            return CreatedAtAction("ReadAsync", new { id }, dish);
         }
     }
 }

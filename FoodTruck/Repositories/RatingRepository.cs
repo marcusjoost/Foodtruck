@@ -15,29 +15,35 @@ namespace FoodTruck.Repositories
             _db = db;
         }
         
-        public async Task<int> CreateRatingAsync(Rating rating)
+        public async Task<int> CreateAsync(Rating value)
         {
-            var obj = new Rating { FoodTruckId = rating.FoodTruckId, Review = rating.Review, Stars = rating.Stars, UserId = rating.UserId };
-            _db.Ratings.Add(obj);
+            var query = _db.Ratings.Where(i => i.Id == value.Id).Select(i => i);
+            if (value.Id != 0 && query.FirstOrDefault() != null) throw new InvalidOperationException("Item already exists in the database.");
+
+            _db.Ratings.Add(value);
             await _db.SaveChangesAsync();
-            return obj.Id = rating.Id;
+            return value.Id;
         }
 
-        public async Task<bool> UpdateRatingAsync(Rating rating)
+        public async Task<bool> UpdateAsync(Rating rating, int id)
         {
-            var obj = _db.Ratings.FirstOrDefault(i => i.UserId == rating.UserId && i.FoodTruckId == rating.FoodTruckId);
+            if (rating == null)
+            {
+                return false;
+            }
+            var obj = _db.Ratings.FirstOrDefault(i => i.Id == id);
             if(obj == null)
             {
                 return false;
             }
             obj.Review = rating.Review;
             obj.Stars = rating.Stars;
-            _db.Ratings.Update(rating);
-            await _db.SaveChangesAsync();
-            return true;
+
+            _db.Ratings.Update(obj);
+            return await _db.SaveChangesAsync() > 0;
         }
 
-        public async Task<bool> DeleteRatingAsync(int ratingId)
+        public async Task<bool> DeleteAsync(int ratingId)
         {
             var rating = _db.Ratings.FirstOrDefault(i => i.Id == ratingId);
             if (rating == null)
@@ -58,7 +64,7 @@ namespace FoodTruck.Repositories
             return _db.Ratings.Where(i => i.UserId == userId);
         }
 
-        public Rating GetRating(int ratingId)
+        public async Task<Rating> FindAsync(int ratingId)
         {
             return _db.Ratings.FirstOrDefault(i => i.Id == ratingId);
         }

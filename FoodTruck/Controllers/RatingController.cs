@@ -18,9 +18,9 @@ namespace FoodTruck.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetAsync(int id)
+        public async Task<IActionResult> ReadAsync(int id)
         {
-            var result = _repo.GetRating(id);
+            var result = await _repo.FindAsync(id);
             if (result == null)
             {
                 return NotFound();
@@ -28,22 +28,22 @@ namespace FoodTruck.Controllers
             return Ok(result);
         }
 
-        [HttpGet]
-        public IEnumerable<Rating> GetRatingToTruck(int truckId)
-        {
-            return _repo.GetRatingToFoodtruck(truckId);
-        }
+        //[HttpGet]
+        //public IEnumerable<Rating> ReadRatingToTruck(int truckId)
+        //{
+        //    return _repo.GetRatingToFoodtruck(truckId);
+        //}
 
-        [HttpGet("{id}")]
-        public IEnumerable<Rating> GetRatingToUser(int userId)
-        {
-            return _repo.GetRatingToUser(userId);
-        }
+        //[HttpGet("{id}")]
+        //public IEnumerable<Rating> ReadRatingToUser(int userId)
+        //{
+        //    return _repo.GetRatingToUser(userId);
+        //}
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteAsync(int id)
         {
-            var result = await _repo.DeleteRatingAsync(id);
+            var result = await _repo.DeleteAsync(id);
             if (result)
             {
                 return NoContent();
@@ -52,13 +52,13 @@ namespace FoodTruck.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateAsync([FromBody]Rating rating, int id)
+        public async Task<IActionResult> UpdateAsync(int id,[FromBody]Rating rating)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            var ok = await _repo.UpdateRatingAsync(rating);
+            var ok = await _repo.UpdateAsync(rating, id);
             if (ok)
             {
                 return NoContent();
@@ -73,8 +73,8 @@ namespace FoodTruck.Controllers
             {
                 return BadRequest(ModelState);
             }
-            var ok = await _repo.CreateRatingAsync(rating);
-            return CreatedAtAction("Get", new { ok }, rating);
+            var id = await _repo.CreateAsync(rating);
+            return CreatedAtAction("ReadAsync", new { id }, rating);
         }
     }
 }
