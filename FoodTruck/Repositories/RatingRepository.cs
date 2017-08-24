@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace FoodTruck.Repositories
 {
@@ -17,35 +18,31 @@ namespace FoodTruck.Repositories
         
         public async Task<int> CreateAsync(Rating value)
         {
-            var query = _db.Ratings.Where(i => i.Id == value.Id).Select(i => i);
-            if (value.Id != 0 && query.FirstOrDefault() != null) throw new InvalidOperationException("Item already exists in the database.");
+            var query = _db.Ratings.FirstOrDefaultAsync(i => i.Id == value.Id);
+            if (query != null)
+            {
+                throw new InvalidOperationException("Item already exists in the database.");
+            }
 
             _db.Ratings.Add(value);
             await _db.SaveChangesAsync();
             return value.Id;
         }
 
-        public async Task<bool> UpdateAsync(Rating rating, int id)
+        public async Task<bool> UpdateAsync(Rating rating)
         {
             if (rating == null)
             {
                 return false;
             }
-            var obj = _db.Ratings.FirstOrDefault(i => i.Id == id);
-            if(obj == null)
-            {
-                return false;
-            }
-            obj.Review = rating.Review;
-            obj.Stars = rating.Stars;
-
-            _db.Ratings.Update(obj);
+            
+            _db.Ratings.Update(rating);
             return await _db.SaveChangesAsync() > 0;
         }
 
         public async Task<bool> DeleteAsync(int ratingId)
         {
-            var rating = _db.Ratings.FirstOrDefault(i => i.Id == ratingId);
+            var rating = await _db.Ratings.FirstOrDefaultAsync(i => i.Id == ratingId);
             if (rating == null)
             {
                 return false;
@@ -66,7 +63,7 @@ namespace FoodTruck.Repositories
 
         public async Task<Rating> FindAsync(int ratingId)
         {
-            return _db.Ratings.FirstOrDefault(i => i.Id == ratingId);
+            return await _db.Ratings.FirstOrDefaultAsync(i => i.Id == ratingId);
         }
 
     }

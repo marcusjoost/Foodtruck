@@ -9,7 +9,7 @@ namespace FoodTruck.Repositories.Interfaces
     public interface IRatingRepository
     {
         Task<int> CreateAsync(Rating rating);
-        Task<bool> UpdateAsync(Rating rating, int id);
+        Task<bool> UpdateAsync(Rating rating);
         Task<bool> DeleteAsync(int ratingId);
         IEnumerable<Rating> GetRatingToFoodtruck(int foodtruckId);
         IEnumerable<Rating> GetRatingToUser(int userId);

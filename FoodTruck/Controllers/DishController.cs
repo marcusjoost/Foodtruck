@@ -40,13 +40,13 @@ namespace FoodTruck.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateAsync(int id,[FromBody]Dish dish)
+        public async Task<IActionResult> UpdateAsync([FromBody]Dish dish)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            var ok = await _repo.UpdateAsync(dish, id);
+            var ok = await _repo.UpdateAsync(dish);
             if (ok)
             {
                 return NoContent();

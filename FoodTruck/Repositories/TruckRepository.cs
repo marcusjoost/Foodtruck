@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace FoodTruck.Repositories
 {
@@ -18,8 +19,11 @@ namespace FoodTruck.Repositories
 
         public async Task<int> CreateAsync(Truck value)
         {
-            var query = _db.Trucks.Where(i => i.Id == value.Id).Select(i => i);
-            if (value.Id != 0 && query.FirstOrDefault() != null) throw new InvalidOperationException("Item already exists in the database.");
+            var query = _db.Trucks.FirstOrDefaultAsync(i => i.Id == value.Id);
+            if (query != null)
+            {
+                throw new InvalidOperationException("Item already exists in the database.");
+            }
 
             _db.Trucks.Add(value);
             await _db.SaveChangesAsync();
@@ -28,7 +32,7 @@ namespace FoodTruck.Repositories
 
         public async Task<bool> DeleteAsync(int truckId)
         {
-            var foodtruck = _db.Trucks.FirstOrDefault(i => i.Id == truckId);
+            var foodtruck = await _db.Trucks.FirstOrDefaultAsync(i => i.Id == truckId);
             if(foodtruck == null)
             {
                 return false;
@@ -40,25 +44,16 @@ namespace FoodTruck.Repositories
 
         public async Task<Truck> FindAsync(int truckId)
         {
-            return _db.Trucks.FirstOrDefault(i => i.Id == truckId);
+            return await _db.Trucks.FirstOrDefaultAsync(i => i.Id == truckId);
         }
        
-        public async Task<bool> UpdateAsync(Truck truck, int id)
+        public async Task<bool> UpdateAsync(Truck truck)
         {
             if (truck == null)
             {
                 return false;
             }
-            var obj = _db.Trucks.FirstOrDefault(i => i.Id == id);
-            if (truck == null)
-            {
-                return false;
-            }
-
-            obj.Name = truck.Name;
-            obj.Coordinates = truck.Coordinates;
-
-            _db.Update(obj);
+            _db.Update(truck);
             return await _db.SaveChangesAsync() > 0;
         }
     }

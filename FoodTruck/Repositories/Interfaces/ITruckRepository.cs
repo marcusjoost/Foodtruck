@@ -9,7 +9,7 @@ namespace FoodTruck.Repositories.Interfaces
     public interface ITruckRepository
     {
         Task<int> CreateAsync(Truck foodtruck);
-        Task<bool> UpdateAsync(Truck foodtruck, int id);
+        Task<bool> UpdateAsync(Truck foodtruck);
         Task<bool> DeleteAsync(int foodtruckId);
         Task<Truck> FindAsync(int foodtruckId);
     }
